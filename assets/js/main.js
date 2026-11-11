@@ -65,7 +65,7 @@
 
   /* Typed rotating words. The heading box has a fixed height, so the layout
      never shifts while the text changes. */
-  var words = ['Android apps', 'desktop apps', 'web apps', 'backends & APIs', 'college projects'];
+  var words = ['mobile apps', 'desktop apps', 'web apps', 'backends & APIs', 'college projects'];
   var rot = $('#rot');
   if (reduce) {
     rot.textContent = words[0];
