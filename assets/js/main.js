@@ -108,4 +108,85 @@
       navigator.clipboard.writeText(email).then(done, done);
     } else { done(); }
   });
+
+  /* Contact form (sent through FormSubmit, which emails the enquiry) */
+  var form = $('#enquiry');
+  if (form) {
+    var ENDPOINT = 'https://formsubmit.co/ajax/arun.idevs@gmail.com';
+    var send = $('#send'), status = $('#status');
+    var body = $('#formBody'), success = $('#success');
+
+    function setErr(name, msg) {
+      var el = form.elements[name];
+      var out = $('.err[data-for="' + name + '"]', form);
+      if (!el || !out) return;
+      out.textContent = msg || '';
+      el.closest('.field').classList.toggle('invalid', !!msg);
+      if (msg) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid');
+    }
+    function validate() {
+      var ok = true, first = null;
+      function bad(name, msg) { setErr(name, msg); if (msg) { ok = false; if (!first) first = form.elements[name]; } }
+      var name = form.elements.name.value.trim();
+      bad('name', name.length < 2 ? 'Please enter your name.' : '');
+      var digits = form.elements.mobile.value.replace(/\D/g, '');
+      var mobileOk = /^[+\d][\d\s\-()]*$/.test(form.elements.mobile.value.trim()) && digits.length >= 10 && digits.length <= 15;
+      bad('mobile', !form.elements.mobile.value.trim() ? 'Mobile number is required.' : (mobileOk ? '' : 'Enter a valid mobile number (10–15 digits).'));
+      var email = form.elements.email.value.trim();
+      bad('email', email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'Enter a valid email or leave it blank.' : '');
+      bad('project_type', !form.elements.project_type.value ? 'Please choose a project type.' : '');
+      bad('message', form.elements.message.value.trim().length < 10 ? 'Please add a few details (at least 10 characters).' : '');
+      if (first) first.focus();
+      return ok;
+    }
+    ['name', 'mobile', 'email', 'project_type', 'message'].forEach(function (n) {
+      form.elements[n].addEventListener('input', function () { setErr(n, ''); });
+      form.elements[n].addEventListener('change', function () { setErr(n, ''); });
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      status.className = 'form-status'; status.textContent = '';
+      if (form.elements._honey.value) return;
+      if (!validate()) return;
+
+      var data = {
+        name: form.elements.name.value.trim(),
+        mobile: form.elements.mobile.value.trim(),
+        email: form.elements.email.value.trim(),
+        project_type: form.elements.project_type.value,
+        budget: form.elements.budget.value || 'Not specified',
+        deadline: form.elements.deadline.value || 'Flexible',
+        contact_preference: form.elements.contact_pref.value,
+        message: form.elements.message.value.trim(),
+        _subject: 'New project enquiry from your portfolio',
+        _template: 'table',
+        _captcha: 'false'
+      };
+      if (!data.email) delete data.email;
+
+      var label = $('.btn-label', send);
+      send.disabled = true; label.textContent = 'Sending…';
+      fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data)
+      }).then(function (r) {
+        return r.json().then(function (j) { return { ok: r.ok, j: j }; });
+      }).then(function (res) {
+        if (!res.ok || String(res.j.success) === 'false') throw new Error('failed');
+        body.hidden = true; success.hidden = false;
+        form.reset();
+      }).catch(function () {
+        status.className = 'form-status error';
+        status.innerHTML = 'Could not send right now. Please email me at <a href="mailto:arun.idevs@gmail.com">arun.idevs@gmail.com</a>.';
+      }).then(function () {
+        send.disabled = false; label.textContent = 'Send enquiry';
+      });
+    });
+
+    $('#again').addEventListener('click', function () {
+      success.hidden = true; body.hidden = false; status.textContent = '';
+    });
+  }
 })();

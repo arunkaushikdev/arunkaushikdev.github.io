@@ -207,7 +207,7 @@
       <div>
         <p class="kicker reveal">Contact</p>
         <h2 class="reveal d1">Let's build <span class="lime">your</span> project.</h2>
-        <p class="lead reveal d2">Send me a few lines about your idea, deadline and budget range, and I'll get back to you with how we can build it.</p>
+        <p class="lead reveal d2">Fill in the form or email me directly. Share a few lines about your idea, and I'll get back to you with how we can build it.</p>
         <div class="contact-links reveal d3">
           <div class="clink-wrap">
             <a class="clink" href="mailto:arun.idevs@gmail.com?subject=Project%20enquiry"><span class="clink-label">Email</span><span>arun.idevs@gmail.com</span></a>
@@ -217,18 +217,99 @@
           <a class="clink" href="https://github.com/arunkaushikdev" target="_blank" rel="noopener"><span class="clink-label">GitHub</span><span>github.com/arunkaushikdev ↗</span></a>
         </div>
       </div>
-      <div class="brief reveal d2">
-        <h3>Keep this ready in your message</h3>
-        <ul>
-          <li><strong>What</strong> — app, website, software or college project?</li>
-          <li><strong>Who</strong> — who will use it?</li>
-          <li><strong>Key features</strong> — 3 to 5 must-haves</li>
-          <li><strong>Deadline</strong> — when do you need it?</li>
-          <li><strong>Budget range</strong> — a rough idea helps me suggest the right scope</li>
-        </ul>
-      </div>
+      <form class="form reveal d2" id="enquiry" novalidate>
+        <div id="formBody">
+          <h3>Tell me about your project</h3>
+          <p class="form-note"><span class="req">*</span> required</p>
+
+          <div class="row">
+            <div class="field">
+              <label for="f-name">Your name <span class="req">*</span></label>
+              <input id="f-name" name="name" type="text" autocomplete="name" placeholder="e.g. Rahul Sharma" required>
+              <small class="err" data-for="name"></small>
+            </div>
+            <div class="field">
+              <label for="f-mobile">Mobile number <span class="req">*</span></label>
+              <input id="f-mobile" name="mobile" type="tel" inputmode="tel" autocomplete="tel" placeholder="+91 98765 43210" required>
+              <small class="err" data-for="mobile"></small>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="f-email">Email <span class="opt">optional</span></label>
+              <input id="f-email" name="email" type="email" autocomplete="email" placeholder="you@example.com">
+              <small class="err" data-for="email"></small>
+            </div>
+            <div class="field">
+              <label for="f-type">What do you need? <span class="req">*</span></label>
+              <select id="f-type" name="project_type" required>
+                <option value="" selected disabled>Select project type</option>
+                <option>Android app</option>
+                <option>Windows desktop app</option>
+                <option>Website / web app</option>
+                <option>Backend / API</option>
+                <option>College project</option>
+                <option>Business software</option>
+                <option>Fix / update existing project</option>
+                <option>Something else</option>
+              </select>
+              <small class="err" data-for="project_type"></small>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="f-budget">Budget range <span class="opt">optional</span></label>
+              <select id="f-budget" name="budget">
+                <option value="" selected>Not sure yet</option>
+                <option>Under ₹10,000</option>
+                <option>₹10,000 – ₹30,000</option>
+                <option>₹30,000 – ₹1,00,000</option>
+                <option>₹1,00,000+</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="f-deadline">Deadline <span class="opt">optional</span></label>
+              <select id="f-deadline" name="deadline">
+                <option value="" selected>Flexible</option>
+                <option>Within 1 week</option>
+                <option>1 – 2 weeks</option>
+                <option>1 month</option>
+                <option>2+ months</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="f-msg">Project details <span class="req">*</span></label>
+            <textarea id="f-msg" name="message" rows="4" minlength="10" placeholder="What should it do? Who will use it? Any must-have features?" required></textarea>
+            <small class="err" data-for="message"></small>
+          </div>
+
+          <fieldset class="field pref">
+            <legend>Best way to reach you</legend>
+            <label class="chip-opt"><input type="radio" name="contact_pref" value="Call" checked><span>Call</span></label>
+            <label class="chip-opt"><input type="radio" name="contact_pref" value="WhatsApp"><span>WhatsApp</span></label>
+            <label class="chip-opt"><input type="radio" name="contact_pref" value="Email"><span>Email</span></label>
+          </fieldset>
+
+          <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+          <button type="submit" class="btn" id="send"><span class="btn-label">Send enquiry</span> <span class="arr">→</span></button>
+          <p class="form-status" id="status" role="status" aria-live="polite"></p>
+          <p class="privacy">Your details are used only to get back to you about your project.</p>
+        </div>
+
+        <div class="success" id="success" hidden>
+          <div class="tick">✓</div>
+          <h3>Thanks, got it!</h3>
+          <p>I've received your enquiry and will get back to you on the number you shared.</p>
+          <button type="button" class="link again" id="again">Send another enquiry</button>
+        </div>
+      </form>
     </div>
-  </section>
+    </section>
 
 </main>
 
