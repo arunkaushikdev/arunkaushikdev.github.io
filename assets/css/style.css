@@ -60,6 +60,19 @@ h3 { font-size: 1.2rem; font-weight: 600; }
 .btn-ghost:hover .arr { background: var(--lime); color: #0b0b0d; }
 
 .btn-sm { padding: .6rem 1.15rem; border-radius: 11px; font-size: .92rem; }
+
+/* Animated "Hire me" in the nav: soft ring pulse, periodic shine, bouncing arrow */
+.btn-hire { gap: .55rem; padding: .42rem .42rem .42rem 1rem; animation: hire-ring 2.8s ease-out infinite; }
+.btn-hire::after { animation: hire-shine 4.2s ease-in-out infinite; }
+.btn-hire .arr { width: 26px; height: 26px; border-radius: 8px; font-size: .85rem; animation: hire-bounce 1.6s ease-in-out infinite; }
+.btn-hire:hover { animation-play-state: paused; }
+.btn-hire:hover .arr { animation: none; transform: translateY(2px); }
+@keyframes hire-ring {
+  0%   { box-shadow: inset 0 1px 0 rgba(255,255,255,.6), inset 0 -2px 0 rgba(0,0,0,.12), 0 0 0 1px rgba(0,0,0,.5), 0 12px 28px -12px rgba(219,250,98,.55), 0 0 0 0 rgba(219,250,98,.55); }
+  70%, 100% { box-shadow: inset 0 1px 0 rgba(255,255,255,.6), inset 0 -2px 0 rgba(0,0,0,.12), 0 0 0 1px rgba(0,0,0,.5), 0 12px 28px -12px rgba(219,250,98,.55), 0 0 0 12px rgba(219,250,98,0); }
+}
+@keyframes hire-shine { 0%, 55% { transform: translateX(-120%); } 85%, 100% { transform: translateX(120%); } }
+@keyframes hire-bounce { 0%, 100% { transform: translateY(-1px); } 50% { transform: translateY(2px); } }
 .link { font-weight: 600; color: var(--lime); text-decoration: none; background: linear-gradient(var(--lime), var(--lime)) 0 100% / 0 2px no-repeat; transition: background-size .3s; padding-bottom: 2px; }
 .link:hover { background-size: 100% 2px; }
 
@@ -214,19 +227,20 @@ h3 { font-size: 1.2rem; font-weight: 600; }
 .copy:hover, .copy.done { background: var(--lime); color: #000; }
 
 /* Contact form */
-.form { background: var(--card); border: 1px solid var(--line); border-radius: 24px; padding: 2rem; position: relative; }
-.form h3 { font-size: 1.5rem; margin-bottom: .3rem; }
-.form-note { font-size: .82rem; color: var(--muted); margin-bottom: 1.4rem; }
+#enquiry { scroll-margin-top: 8px; }
+.form { background: var(--card); border: 1px solid var(--line); border-radius: 24px; padding: 1.5rem 1.8rem 1.4rem; position: relative; }
+.form h3 { font-size: 1.4rem; margin-bottom: .2rem; }
+.form-note { font-size: .8rem; color: var(--muted); margin-bottom: 1rem; }
 .req { color: var(--lime); }
 .opt { font-family: var(--mono); font-size: .68rem; color: var(--muted); margin-left: .3rem; text-transform: uppercase; letter-spacing: .06em; }
 .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-.field { margin-bottom: 1.1rem; border: 0; min-width: 0; }
-.field label, .field legend { display: block; font-size: .86rem; font-weight: 500; margin-bottom: .45rem; color: var(--ink); }
+.field { margin-bottom: .85rem; border: 0; min-width: 0; }
+.field label, .field legend { display: block; font-size: .84rem; font-weight: 500; margin-bottom: .35rem; color: var(--ink); }
 .field input[type="text"], .field input[type="tel"], .field input[type="email"], .field select, .field textarea {
-  width: 100%; font: inherit; font-size: .95rem; color: var(--ink); background: #0e0e11; border: 1px solid #2f2f37; border-radius: 12px; padding: .8rem .95rem;
+  width: 100%; font: inherit; font-size: .95rem; color: var(--ink); background: #0e0e11; border: 1px solid #2f2f37; border-radius: 12px; padding: .7rem .9rem;
   transition: border-color .2s, box-shadow .2s, background .2s; appearance: none; -webkit-appearance: none;
 }
-.field textarea { resize: vertical; min-height: 110px; }
+.field textarea { resize: vertical; min-height: 84px; }
 .field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%239b9ba5' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right .95rem center; padding-right: 2.4rem; }
 .field select:invalid { color: #6f6f79; }
 .field select option { color: var(--ink); background: #151518; }
@@ -247,7 +261,7 @@ h3 { font-size: 1.2rem; font-weight: 600; }
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .form .btn { width: 100%; margin-top: .4rem; justify-content: space-between; padding-left: 1.4rem; }
 .form .btn[disabled] { opacity: .7; cursor: progress; transform: none; }
-.form-status { min-height: 1.2em; margin-top: .9rem; font-size: .88rem; color: var(--muted); }
+.form-status { min-height: 0; margin-top: .6rem; font-size: .88rem; color: var(--muted); }
 .form-status.error { color: #ff8a8a; }
 .form-status a { color: var(--lime); }
 .privacy { margin-top: .4rem; font-size: .76rem; color: #6f6f79; }
@@ -266,6 +280,8 @@ h3 { font-size: 1.2rem; font-weight: 600; }
 .js .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
 .js .reveal.in { opacity: 1; transform: none; }
 .js .reveal.d1 { transition-delay: .06s; } .js .reveal.d2 { transition-delay: .12s; } .js .reveal.d3 { transition-delay: .18s; } .js .reveal.d4 { transition-delay: .24s; }
+
+.js .form.reveal, .js .form.reveal.in { transform: none; }
 
 /* Responsive */
 @media (max-width: 960px) {
