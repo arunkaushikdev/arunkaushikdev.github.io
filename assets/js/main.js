@@ -1,7 +1,6 @@
 (function () {
   'use strict';
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
@@ -18,17 +17,23 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  /* Reveal on scroll */
+  /* Reveal on scroll. After it finishes, the reveal classes are removed so
+     they never interfere with hover effects. */
   var items = $$('.reveal');
+  function finish(el) {
+    setTimeout(function () {
+      el.classList.remove('reveal', 'in', 'd1', 'd2', 'd3', 'd4');
+    }, 1100);
+  }
   if ('IntersectionObserver' in window && !reduce) {
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        if (e.isIntersecting) { e.target.classList.add('in'); finish(e.target); io.unobserve(e.target); }
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
     items.forEach(function (el) { io.observe(el); });
   } else {
-    items.forEach(function (el) { el.classList.add('in'); });
+    items.forEach(function (el) { el.classList.remove('reveal'); });
   }
 
   /* Count-up stats */
@@ -36,7 +41,7 @@
     var target = parseInt(el.getAttribute('data-count'), 10);
     var suffix = el.getAttribute('data-suffix') || '';
     if (reduce) { el.textContent = target + suffix; return; }
-    var start = null, dur = 1400;
+    var start = null, dur = 1200;
     function step(t) {
       if (!start) start = t;
       var p = Math.min((t - start) / dur, 1);
@@ -58,56 +63,23 @@
     counters.forEach(countUp);
   }
 
-  /* Rotating typed words */
-  var words = ['Android apps', 'Windows desktop apps', 'web apps', 'backends & APIs', 'your college project'];
+  /* Typed rotating words. The heading box has a fixed height, so the layout
+     never shifts while the text changes. */
+  var words = ['Android apps', 'desktop apps', 'web apps', 'backends & APIs', 'college projects'];
   var rot = $('#rot');
   if (reduce) {
-    rot.textContent = 'software you need';
+    rot.textContent = words[0];
   } else {
     var wi = 0, ci = 0, del = false;
     (function tick() {
       var w = words[wi];
       rot.textContent = w.slice(0, ci);
-      var delay = del ? 35 : 75;
-      if (!del && ci === w.length) { del = true; delay = 1500; }
-      else if (del && ci === 0) { del = false; wi = (wi + 1) % words.length; delay = 350; }
+      var delay = del ? 40 : 80;
+      if (!del && ci === w.length) { del = true; delay = 1600; }
+      else if (del && ci === 0) { del = false; wi = (wi + 1) % words.length; delay = 400; }
       ci += del ? -1 : 1;
       setTimeout(tick, delay);
     })();
-  }
-
-  /* Cursor glow */
-  var glow = $('#glow');
-  if (fine && !reduce) {
-    window.addEventListener('mousemove', function (e) {
-      glow.classList.add('on');
-      glow.style.transform = 'translate(' + e.clientX + 'px,' + e.clientY + 'px)';
-    }, { passive: true });
-    document.addEventListener('mouseleave', function () { glow.classList.remove('on'); });
-  }
-
-  /* 3D tilt on cards */
-  if (fine && !reduce) {
-    $$('.tilt').forEach(function (el) {
-      el.addEventListener('mousemove', function (e) {
-        var r = el.getBoundingClientRect();
-        var x = (e.clientX - r.left) / r.width - 0.5;
-        var y = (e.clientY - r.top) / r.height - 0.5;
-        el.style.transform = 'perspective(900px) rotateY(' + (x * 7) + 'deg) rotateX(' + (-y * 7) + 'deg) translateY(-3px)';
-      });
-      el.addEventListener('mouseleave', function () { el.style.transform = ''; });
-    });
-
-    /* Magnetic buttons */
-    $$('.magnetic').forEach(function (el) {
-      el.addEventListener('mousemove', function (e) {
-        var r = el.getBoundingClientRect();
-        var x = e.clientX - (r.left + r.width / 2);
-        var y = e.clientY - (r.top + r.height / 2);
-        el.style.transform = 'translate(' + (x * 0.18) + 'px,' + (y * 0.25) + 'px)';
-      });
-      el.addEventListener('mouseleave', function () { el.style.transform = ''; });
-    });
   }
 
   /* Typesider mini demo: Tyzaps -> Typoints */
@@ -121,7 +93,7 @@
       if (count >= 100) { count -= 100; points += 1; pts.textContent = points; }
       tz.textContent = count;
       tzbar.style.width = count + '%';
-    }, 90);
+    }, 110);
   }
 
   /* Copy email */
