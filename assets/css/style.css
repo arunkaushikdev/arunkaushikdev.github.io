@@ -128,7 +128,8 @@ h3 { font-size: 1.2rem; font-weight: 600; }
 .section.tight { padding: 4rem 0 2rem; }
 .section-alt { background: var(--bg-2); border-block: 1px solid var(--line); }
 .kicker { font-family: var(--mono); font-size: .8rem; text-transform: uppercase; letter-spacing: .16em; color: var(--lime); margin-bottom: .8rem; }
-.sub { margin: 3.2rem 0 1.4rem; font-size: 1.5rem; }
+.sub { margin: 3.2rem 0 .4rem; font-size: 1.5rem; }
+.sub-note { color: var(--muted); font-size: .95rem; margin-bottom: 1.4rem; max-width: 62ch; }
 
 /* Audience */
 .audience { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
